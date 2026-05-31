@@ -242,14 +242,23 @@
       document.getElementById("syncStatus").textContent = text;
     }
 
-    function showLoading(text = "Memproses data...") {
-      document.getElementById("loadingText").textContent = text;
-      document.getElementById("loadingOverlay").style.display = "flex";
-    }
+    let loadingStartTime = 0;
 
-    function hideLoading() {
-      document.getElementById("loadingOverlay").style.display = "none";
-    }
+function showLoading(text = "Memproses data...") {
+  loadingStartTime = Date.now();
+  document.getElementById("loadingText").textContent = text;
+  document.getElementById("loadingOverlay").style.display = "flex";
+}
+
+function hideLoading() {
+  const minimumLoadingTime = 700;
+  const elapsed = Date.now() - loadingStartTime;
+  const remaining = minimumLoadingTime - elapsed;
+
+  setTimeout(() => {
+    document.getElementById("loadingOverlay").style.display = "none";
+  }, remaining > 0 ? remaining : 0);
+}
 
     function isiTanggalSekarang() {
       const now = new Date();
