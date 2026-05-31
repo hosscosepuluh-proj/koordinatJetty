@@ -11,36 +11,93 @@
     header { background: linear-gradient(135deg, #0f172a, #1e40af); color: white; padding: 24px; text-align: center; }
     header h1 { margin: 0; font-size: 28px; }
     header p { margin: 8px 0 0; opacity: 0.9; }
+
     .container { max-width: 1200px; margin: 24px auto; padding: 0 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
     .card { background: white; border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08); }
     .card h2 { margin-top: 0; color: #0f172a; font-size: 20px; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px; }
+
     label { font-weight: bold; display: block; margin-top: 12px; margin-bottom: 6px; font-size: 14px; }
     input, select { width: 100%; padding: 11px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 14px; background: white; }
+
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
     .button-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+
     button { border: none; padding: 11px 16px; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 14px; }
     .btn-primary { background: #2563eb; color: white; }
     .btn-success { background: #16a34a; color: white; }
     .btn-danger { background: #dc2626; color: white; }
     .btn-secondary { background: #64748b; color: white; }
     .btn-warning { background: #f59e0b; color: white; }
+
     .coordinate-box { background: #eef6ff; border: 1px solid #bfdbfe; padding: 14px; border-radius: 14px; margin-top: 14px; }
     .coordinate-box h3 { margin: 0 0 10px; color: #1e40af; font-size: 17px; }
+
     .small-note { font-size: 12px; color: #64748b; margin-top: 8px; line-height: 1.4; }
     .edit-info { display: none; background: #fff7ed; border: 1px solid #fed7aa; color: #9a3412; padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 14px; font-weight: bold; }
     .sync-info { background: #ecfdf5; border: 1px solid #bbf7d0; color: #166534; padding: 10px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
+
     .preview-img { width: 100%; max-height: 180px; object-fit: contain; border-radius: 12px; margin-top: 8px; border: 1px solid #e5e7eb; display: none; transition: transform 0.35s ease, box-shadow 0.35s ease; cursor: zoom-in; background: white; }
+
     .report-list { display: flex; flex-direction: column; gap: 14px; max-height: 780px; overflow-y: auto; padding-right: 4px; }
     .report-item { border: 1px solid #e5e7eb; border-radius: 14px; padding: 14px; background: #f8fafc; }
     .report-item h3 { margin: 0 0 8px; color: #1e40af; }
     .report-item p { margin: 5px 0; font-size: 14px; line-height: 1.4; }
+
     .report-images { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
     .report-images img { width: 100%; height: 110px; object-fit: contain; border-radius: 10px; border: 1px solid #e5e7eb; transition: transform 0.35s ease, box-shadow 0.35s ease; cursor: zoom-in; background: white; }
-    .preview-img:hover, .report-images img:hover { transform: scale(1.02) translateY(-2px); box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18); z-index: 5; }
+
+    .preview-img:hover, .report-images img:hover {
+      transform: scale(1.02) translateY(-2px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.18);
+      z-index: 5;
+    }
+
     .badge { display: inline-block; padding: 4px 9px; background: #dbeafe; color: #1e40af; border-radius: 999px; font-size: 12px; font-weight: bold; }
     .empty { text-align: center; color: #64748b; padding: 24px; border: 1px dashed #cbd5e1; border-radius: 14px; }
+
     a { color: #2563eb; font-weight: bold; text-decoration: none; }
     a:hover { text-decoration: underline; }
+
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      z-index: 99999;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .loading-box {
+      background: white;
+      padding: 24px 30px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.35);
+      min-width: 240px;
+    }
+
+    .spinner {
+      width: 44px;
+      height: 44px;
+      border: 5px solid #e5e7eb;
+      border-top: 5px solid #2563eb;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+      margin: 0 auto 14px;
+    }
+
+    .loading-text {
+      font-weight: bold;
+      color: #0f172a;
+      font-size: 15px;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
 
     @media print {
       body { background: white; }
@@ -51,11 +108,20 @@
       .report-item { page-break-inside: avoid; }
     }
 
-    @media (max-width: 900px) { .container, .row, .report-images { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) {
+      .container, .row, .report-images { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 
 <body>
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-box">
+      <div class="spinner"></div>
+      <div id="loadingText" class="loading-text">Memproses data...</div>
+    </div>
+  </div>
+
   <header>
     <h1>Laporan Jetty Pelabuhan</h1>
     <p>Data tersimpan ke Google Sheets dan foto tersimpan ke Google Drive</p>
@@ -69,7 +135,9 @@
         Status: <span id="syncStatus">Siap digunakan</span>
       </div>
 
-      <div id="editInfo" class="edit-info">Mode edit aktif. Perbaiki data, lalu klik Simpan Perubahan.</div>
+      <div id="editInfo" class="edit-info">
+        Mode edit aktif. Perbaiki data, lalu klik Simpan Perubahan.
+      </div>
 
       <form id="reportForm">
         <label for="kotaProvinsi">Nama Kota / Provinsi</label>
@@ -91,21 +159,27 @@
 
         <div class="coordinate-box">
           <h3>Titik Koordinat</h3>
+
           <div class="row">
             <div>
               <label for="koordinatS">Koordinat S</label>
               <input type="text" id="koordinatS" placeholder="Contoh: 02° 07' 30.5&quot; S" required />
             </div>
+
             <div>
               <label for="koordinatE">Koordinat E</label>
               <input type="text" id="koordinatE" placeholder="Contoh: 115° 10' 22.8&quot; E" required />
             </div>
           </div>
+
           <div class="button-group">
             <button type="button" class="btn-secondary" onclick="ambilLokasiOtomatis()">Ambil GPS Otomatis</button>
             <button type="button" class="btn-warning" onclick="bukaMapsDariForm()">Cek di Google Maps</button>
           </div>
-          <div class="small-note">Koordinat otomatis dari GPS akan diubah ke format derajat menit detik S dan E.</div>
+
+          <div class="small-note">
+            Koordinat otomatis dari GPS akan diubah ke format derajat menit detik S dan E.
+          </div>
         </div>
 
         <label for="fotoKapal">Upload Foto Kapal</label>
@@ -155,7 +229,6 @@
   </div>
 
   <script>
-    // GANTI URL DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT MILIK KAMU
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxg-ddV978IE9kNODkL4wC7sCJGVRC0JCYUG5Zuq62fDIwbKSCs2pcgNyKnZVuIiNd-/exec";
     const STORAGE_KEY = "laporanJettySederhanaBackup";
 
@@ -169,10 +242,20 @@
       document.getElementById("syncStatus").textContent = text;
     }
 
+    function showLoading(text = "Memproses data...") {
+      document.getElementById("loadingText").textContent = text;
+      document.getElementById("loadingOverlay").style.display = "flex";
+    }
+
+    function hideLoading() {
+      document.getElementById("loadingOverlay").style.display = "none";
+    }
+
     function isiTanggalSekarang() {
       const now = new Date();
       document.getElementById("tanggalSandar").value = now.toISOString().split("T")[0];
     }
+
     isiTanggalSekarang();
 
     function getLaporanLocal() {
@@ -186,20 +269,28 @@
     async function resizeImageToBase64(file, maxWidth = 1000, quality = 0.75) {
       return new Promise((resolve) => {
         if (!file) return resolve("");
+
         const reader = new FileReader();
+
         reader.onload = function(e) {
           const img = new Image();
+
           img.onload = function() {
             const canvas = document.createElement("canvas");
             const scale = Math.min(maxWidth / img.width, 1);
+
             canvas.width = img.width * scale;
             canvas.height = img.height * scale;
+
             const ctx = canvas.getContext("2d");
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
             resolve(canvas.toDataURL("image/jpeg", quality));
           };
+
           img.src = e.target.result;
         };
+
         reader.readAsDataURL(file);
       });
     }
@@ -239,14 +330,18 @@
       };
 
       setStatus("Menyimpan ke Google Sheets...");
+      showLoading("Menyimpan laporan ke Sheet...");
 
       try {
         const result = await kirimKeSheet(laporan);
         if (!result.success) throw new Error(result.message || "Gagal menyimpan ke Sheet");
 
-        await loadLaporanDariSheet();
+        await loadLaporanDariSheet(false);
         resetForm();
+
         setStatus("Berhasil disimpan ke Google Sheets dan Google Drive.");
+        hideLoading();
+
         alert(editingId ? "Laporan berhasil diperbarui di Sheet." : "Laporan berhasil disimpan ke Sheet.");
       } catch (error) {
         let backup = getLaporanLocal();
@@ -260,7 +355,10 @@
 
         saveLaporanLocal(backup);
         tampilkanLaporan();
+
         setStatus("Gagal konek ke Sheet. Data disimpan sementara di browser ini.");
+        hideLoading();
+
         alert("Gagal menyimpan ke Sheet. Cek URL Apps Script / koneksi internet. Data sementara tetap tersimpan di browser ini.");
       }
     });
@@ -278,7 +376,7 @@
       return await response.json();
     }
 
-    async function loadLaporanDariSheet() {
+    async function loadLaporanDariSheet(show = true) {
       if (!SCRIPT_URL || SCRIPT_URL.includes("PASTE_URL")) {
         setStatus("URL Apps Script belum diisi. Riwayat memakai penyimpanan browser.");
         tampilkanLaporan();
@@ -287,6 +385,11 @@
 
       try {
         setStatus("Mengambil data dari Google Sheets...");
+
+        if (show) {
+          showLoading("Mengambil data dari Sheet...");
+        }
+
         const response = await fetch(SCRIPT_URL + "?action=list&t=" + Date.now());
         const result = await response.json();
 
@@ -294,10 +397,19 @@
 
         saveLaporanLocal(result.data || []);
         tampilkanLaporan();
+
         setStatus("Data berhasil dimuat dari Google Sheets.");
+
+        if (show) {
+          hideLoading();
+        }
       } catch (error) {
         setStatus("Gagal mengambil dari Sheet. Menampilkan backup browser.");
         tampilkanLaporan();
+
+        if (show) {
+          hideLoading();
+        }
       }
     }
 
@@ -330,6 +442,7 @@
         reportList.innerHTML = keyword
           ? '<div class="empty">Laporan yang dicari tidak ditemukan.</div>'
           : (filterKapal === "semua" ? '<div class="empty">Belum ada laporan yang tersimpan.</div>' : `<div class="empty">Belum ada laporan untuk ${filterKapal}.</div>`);
+
         return;
       }
 
@@ -339,7 +452,7 @@
           : `https://www.google.com/maps/search/${encodeURIComponent((item.koordinatS || "") + " " + (item.koordinatE || ""))}`;
 
         const fotoKapalSrc = item.fotoKapal || item.fotoKapalUrl || "";
-	const fotoGPSSrc = item.fotoGPS || item.fotoGPSUrl || "";
+        const fotoGPSSrc = item.fotoGPS || item.fotoGPSUrl || "";
 
         return `
           <div class="report-item">
@@ -372,6 +485,7 @@
       if (!item) return alert("Data laporan tidak ditemukan.");
 
       editingId = String(id);
+
       document.getElementById("kotaProvinsi").value = item.kotaProvinsi || "";
       document.getElementById("namaKapal").value = item.namaKapal || "";
       document.getElementById("tanggalSandar").value = item.tanggalSandar || "";
@@ -384,43 +498,55 @@
       fotoKapalBase64 = item.fotoKapal || "";
       fotoGPSBase64 = item.fotoGPS || "";
 
-      document.getElementById("previewKapal").src = item.fotoKapalUrl || item.fotoKapal || "";
-      document.getElementById("previewKapal").style.display = (item.fotoKapalUrl || item.fotoKapal) ? "block" : "none";
-      document.getElementById("previewGPS").src = item.fotoGPSUrl || item.fotoGPS || "";
-      document.getElementById("previewGPS").style.display = (item.fotoGPSUrl || item.fotoGPS) ? "block" : "none";
+      document.getElementById("previewKapal").src = item.fotoKapal || item.fotoKapalUrl || "";
+      document.getElementById("previewKapal").style.display = (item.fotoKapal || item.fotoKapalUrl) ? "block" : "none";
+
+      document.getElementById("previewGPS").src = item.fotoGPS || item.fotoGPSUrl || "";
+      document.getElementById("previewGPS").style.display = (item.fotoGPS || item.fotoGPSUrl) ? "block" : "none";
 
       document.getElementById("submitBtn").textContent = "Simpan Perubahan";
       document.getElementById("cancelEditBtn").style.display = "inline-block";
       document.getElementById("editInfo").style.display = "block";
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function batalEdit() { resetForm(); }
+    function batalEdit() {
+      resetForm();
+    }
 
     function resetForm() {
       document.getElementById("reportForm").reset();
+
       fotoKapalBase64 = "";
       fotoGPSBase64 = "";
       latitudeDecimal = "";
       longitudeDecimal = "";
       editingId = null;
+
       document.getElementById("previewKapal").style.display = "none";
       document.getElementById("previewGPS").style.display = "none";
       document.getElementById("submitBtn").textContent = "Simpan Laporan";
       document.getElementById("cancelEditBtn").style.display = "none";
       document.getElementById("editInfo").style.display = "none";
+
       isiTanggalSekarang();
     }
 
     async function hapusLaporan(id) {
       if (!confirm("Yakin ingin menghapus laporan ini?")) return;
 
+      showLoading("Menghapus laporan...");
+
       if (SCRIPT_URL && !SCRIPT_URL.includes("PASTE_URL")) {
         try {
           await kirimKeSheet({ action: "delete", id: String(id) });
-          await loadLaporanDariSheet();
+          await loadLaporanDariSheet(false);
+
+          hideLoading();
           return;
         } catch (e) {
+          hideLoading();
           alert("Gagal hapus dari Sheet. Data akan dihapus dari tampilan local saja.");
         }
       }
@@ -428,10 +554,13 @@
       const semuaLaporan = getLaporanLocal().filter(item => String(item.id) !== String(id));
       saveLaporanLocal(semuaLaporan);
       tampilkanLaporan();
+
+      hideLoading();
     }
 
     function hapusSemuaLaporanLocal() {
       if (!confirm("Hapus tampilan local di browser ini? Data di Google Sheets tidak terhapus.")) return;
+
       localStorage.removeItem(STORAGE_KEY);
       tampilkanLaporan();
       resetForm();
@@ -444,6 +573,7 @@
       const minutesFloat = (abs - degrees) * 60;
       const minutes = Math.floor(minutesFloat);
       const seconds = ((minutesFloat - minutes) * 60).toFixed(2);
+
       return `${degrees}° ${minutes}' ${seconds}" ${direction}`;
     }
 
@@ -451,22 +581,34 @@
       const text = dmsText.trim().toUpperCase();
       const direction = text.includes("S") || text.includes("W") ? -1 : 1;
       const numbers = text.match(/\d+(\.\d+)?/g);
+
       if (!numbers || numbers.length < 1) return null;
+
       const degrees = parseFloat(numbers[0]) || 0;
       const minutes = parseFloat(numbers[1]) || 0;
       const seconds = parseFloat(numbers[2]) || 0;
+
       return direction * (degrees + minutes / 60 + seconds / 3600);
     }
 
     function ambilLokasiOtomatis() {
-      if (!navigator.geolocation) return alert("Browser tidak mendukung fitur GPS/Geolocation.");
+      if (!navigator.geolocation) {
+        return alert("Browser tidak mendukung fitur GPS/Geolocation.");
+      }
+
       navigator.geolocation.getCurrentPosition(function(position) {
         latitudeDecimal = position.coords.latitude.toFixed(8);
         longitudeDecimal = position.coords.longitude.toFixed(8);
+
         let latText = decimalToDMS(position.coords.latitude, "lat");
-        if (!latText.includes("S")) latText = latText.replace("N", "S");
+
+        if (!latText.includes("S")) {
+          latText = latText.replace("N", "S");
+        }
+
         document.getElementById("koordinatS").value = latText;
         document.getElementById("koordinatE").value = decimalToDMS(position.coords.longitude, "lng");
+
         alert("Koordinat GPS berhasil diambil otomatis.");
       }, function() {
         alert("Gagal mengambil lokasi. Pastikan izin lokasi/GPS aktif di browser.");
@@ -476,22 +618,42 @@
     function bukaMapsDariForm() {
       const koordinatS = document.getElementById("koordinatS").value;
       const koordinatE = document.getElementById("koordinatE").value;
-      if (!koordinatS || !koordinatE) return alert("Isi koordinat S dan E terlebih dahulu.");
+
+      if (!koordinatS || !koordinatE) {
+        return alert("Isi koordinat S dan E terlebih dahulu.");
+      }
+
       const lat = dmsToDecimal(koordinatS);
       const lng = dmsToDecimal(koordinatE);
-      window.open(lat !== null && lng !== null ? `https://www.google.com/maps?q=${lat},${lng}` : `https://www.google.com/maps/search/${encodeURIComponent(koordinatS + " " + koordinatE)}`, "_blank");
+
+      window.open(
+        lat !== null && lng !== null
+          ? `https://www.google.com/maps?q=${lat},${lng}`
+          : `https://www.google.com/maps/search/${encodeURIComponent(koordinatS + " " + koordinatE)}`,
+        "_blank"
+      );
     }
 
     document.addEventListener("click", function(e) {
-      if (e.target.matches(".report-images img") || e.target.matches(".preview-img")) openImageModal(e.target.src);
+      if (e.target.matches(".report-images img") || e.target.matches(".preview-img")) {
+        openImageModal(e.target.src);
+      }
     });
 
     function openImageModal(src) {
       document.getElementById("modalImage").src = src;
       document.getElementById("imageModal").style.display = "flex";
     }
-    function closeImageModal() { document.getElementById("imageModal").style.display = "none"; }
-    document.getElementById("imageModal").addEventListener("click", function(e) { if (e.target.id === "imageModal") closeImageModal(); });
+
+    function closeImageModal() {
+      document.getElementById("imageModal").style.display = "none";
+    }
+
+    document.getElementById("imageModal").addEventListener("click", function(e) {
+      if (e.target.id === "imageModal") {
+        closeImageModal();
+      }
+    });
 
     loadLaporanDariSheet();
   </script>
